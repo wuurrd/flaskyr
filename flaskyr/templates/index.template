@@ -2,11 +2,19 @@
 <head>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="http://code.highcharts.com/highcharts.js"></script>
-<script type="/text/javascript" src="/static/darkunica.js"></script>
+<script type="text/javascript" src="/static/darkunica.js"></script>
+<script type="text/javascript" src="/static/rainbowvis.js"></script>
 <script type="text/javascript">
 var search_location = 'Norge/Akershus/Bærum/Halden_Brygge';
 
 function get_color(value){
+  var rainbow = new Rainbow();
+  /*rainbow.setSpectrum('#7cb5ec', '#F2F5A9', '#DF0101');*/
+  rainbow.setSpectrum('green', 'red');
+  rainbow.setNumberRange(0.0, 20);
+  console.log(value, rainbow.colourAt(value));
+  return '#' + rainbow.colourAt(value);
+
   if (value < 5) {
     return '#7cb5ec';
   }
@@ -26,105 +34,114 @@ function get_color(value){
 
 function create_graph(){
         $('#container').empty();
+        $('#longterm_container').empty();
         $('#container').append("Loading weather data...");
-        var series = [];
-        $.get('/weather/json/' + search_location, function(data){
-          $('#container').empty();
-          var weatherdata = data.weatherdata.forecast.tabular.time;
-          var hours = [];
-          var wind_values = [];
-          var wind_direction = [];
-          weatherdata.forEach(function(value){
-            wind_values.push(
-              {y: parseFloat(value.windSpeed['@mps']),
-               color: get_color(parseFloat(value.windSpeed['@mps']))});
-            wind_direction.push(parseFloat(value.windDirection['@deg']));
-            from = value['@from'];
-            from = from.replace(/.*T/g, '');
-            from = from.replace(/:00$/g, '');
-            hours.push(from);
-          });
-          var location = data.weatherdata.location.name;
-          series.push({name: "Wind Speed (m/s)", data: wind_values, yAxis: 0});
-          series.push({name: "Wind Direction", data: wind_direction, yAxis: 1,
-                       type: 'scatter'});
-          var maxSpeed = 0; 
-          for (var i=0; i<wind_values.length; i++)
-          {
-            if (wind_values[i].y > maxSpeed) {
-              maxSpeed = wind_values[i].y;
-            }
-          }
+        $.get('/weather/longterm/json/' + search_location, function(data){
+          fill_container(data, $('#longterm_container'), 'longterm forecast');
+        });
 
-          $('#container').highcharts({
-              chart: {
-                  type: 'column',
-                  alignTicks: false,
-              },
-              credits: {enabled: false},
-              title: {
-                  text: location
-              },
-              xAxis: {
-                  categories: hours,
-                  labels: {
-                    rotation: -45,
-                    align: 'right',
-                    style: {
-                        fontSize: '13px',
-                        fontFamily: 'Verdana, sans-serif'
-                    }
-                }
-              },
-              yAxis: [
-                  {
-                    min: 0,
-                    max: parseInt(maxSpeed) + 1,
-                    tickInterval: 1,
-                    endOnTick: false,
-                    title: {
-                        text: ''
-                    }
-                  },
-                  {
+        $.get('/weather/json/' + search_location, function(data){
+          fill_container(data, $('#container'), 'short-term forecast');
+        });
+}
+
+function fill_container(data, container, title_suffix){
+        var series = [];
+        container.empty();
+        var weatherdata = data.weatherdata.forecast.tabular.time;
+        var hours = [];
+        var wind_values = [];
+        var wind_direction = [];
+        weatherdata.forEach(function(value){
+          wind_values.push(
+            {y: parseFloat(value.windSpeed['@mps']),
+             color: get_color(parseFloat(value.windSpeed['@mps']))});
+          wind_direction.push(parseFloat(value.windDirection['@deg']));
+          from = value['@from'];
+          from = from.replace(/.*T/g, '');
+          from = from.replace(/:00$/g, '');
+          hours.push(from);
+        });
+        var location = data.weatherdata.location.name + ' ' + title_suffix;
+        series.push({name: "Wind Speed (m/s)", data: wind_values, yAxis: 0});
+        series.push({name: "Wind Direction", data: wind_direction, yAxis: 1,
+                     type: 'scatter', color: 'rgba(255, 255, 255, .5)'});
+        var maxSpeed = 0; 
+        for (var i=0; i<wind_values.length; i++)
+        {
+          if (wind_values[i].y > maxSpeed) {
+            maxSpeed = wind_values[i].y;
+          }
+        }
+
+        container.highcharts({
+            chart: {
+                type: 'column',
+                alignTicks: false,
+            },
+            credits: {enabled: false},
+            title: {
+                text: location
+            },
+            xAxis: {
+                categories: hours,
+                labels: {
+                  rotation: -45,
+                  align: 'right',
+                  style: {
+                      fontSize: '13px',
+                      fontFamily: 'Verdana, sans-serif'
+                  }
+              }
+            },
+            yAxis: [
+                {
                   min: 0,
-                  max: 360,
-                  tickInterval: 90,
+                  max: parseInt(maxSpeed) + 1,
+                  tickInterval: 1,
                   endOnTick: false,
-                  gridLineWidth: 0,
-                  title: { text: ''},
-                  labels: {
-                  formatter: function() { 
-                    switch(parseInt(this.value) / 90) {
-                      case 0:
-                        return 'North';
-                      case 1:
-                        return 'East';
-                      case 2:
-                        return 'South';
-                      case 3:
-                        return 'West';
-                    }
-                  }},
-                  opposite: true
+                  title: {
+                      text: ''
                   }
-              ],
-              tooltip: {
-                  headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                  pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                      '<td style="padding:0"><b>{point.y:.1f} m/s</b></td></tr>',
-                  footerFormat: '</table>',
-                  shared: true,
-                  useHTML: true
-              },
-              plotOptions: {
-                  column: {
-                      pointPadding: 0.2,
-                      borderWidth: 0
+                },
+                {
+                min: 0,
+                max: 360,
+                tickInterval: 90,
+                endOnTick: false,
+                gridLineWidth: 0,
+                title: { text: ''},
+                labels: {
+                formatter: function() { 
+                  switch(parseInt(this.value) / 90) {
+                    case 0:
+                      return 'North';
+                    case 1:
+                      return 'East';
+                    case 2:
+                      return 'South';
+                    case 3:
+                      return 'West';
                   }
-              },
-              series: series
-          });
+                }},
+                opposite: true
+                }
+            ],
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f} m/s</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: series
         });
 }
 
@@ -139,8 +156,9 @@ function set_location(){
 }
 </script>
 </head>
-<body>
+<body bgcolor="#111111">
 <div id="container"></div>
+<div id="longterm_container"></div>
 <select onchange="set_location()" id="location">
 <option value="Norge/Akershus/B%C3%A6rum/Halden_Brygge">Halden Brygge</option>
 <option value="Norge/Østfold/Rygge/Larkollen">Larkollen</option>
