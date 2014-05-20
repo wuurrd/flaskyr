@@ -160,8 +160,14 @@ function set_location(){
 <div id="container"></div>
 <div id="longterm_container"></div>
 <select onchange="set_location()" id="location">
-<option value="Norge/Akershus/B%C3%A6rum/Halden_Brygge">Halden Brygge</option>
-<option value="Norge/Østfold/Rygge/Larkollen">Larkollen</option>
+<option value="Norway/Akershus/B%C3%A6rum/Halden_Brygge">Halden Brygge (Bærum)</option>
+<option value="Norway/Østfold/Rygge/Larkollen">Larkollen (Rygge)</option>
+<option value="Norway/Østfold/Råde/Store_Sletter/">Store Sletter (Østfold)</option>
+<option value="Norway/Akershus/Frogn/Torkilstranda/">Torkilstranda (Frogn)</option>
+<option value="Norway/Vestfold/Tønsberg/Ringshaug/">Ringshaug (Vestfold)</option>
+<option value="Norway/Østfold/Moss/Jeløya/">Jeløya (Moss)</option>
+<option value="Norway/Østfold/Hvaler/Ørekroken/">Ørekroken (Hvaler)</option>
+<option value="Norway/Finnmark/Måsøy/Fruholmen/">Fruholmen (Måsøy)</option>
 </select>
 </body>
 </html>
