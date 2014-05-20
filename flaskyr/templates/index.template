@@ -169,5 +169,10 @@ function set_location(){
 <option value="Norway/Østfold/Hvaler/Ørekroken/">Ørekroken (Hvaler)</option>
 <option value="Norway/Finnmark/Måsøy/Fruholmen/">Fruholmen (Måsøy)</option>
 </select>
+<div style="position:relative; bottom:0px; color: white;text-align:center;">
+    <a href="http://www.yr.no/place/Norway/Akershus/Bærum/Halden_brygge/hour_by_hour.html" style="text-decoration: none">
+        <font face="sans-serif" size="2" color=#b0b0b0>[Weather forecast from yr.no, delivered by the Norwegian Meteorological Institute and the NRK]</font>
+    </a>
+</div>
 </body>
 </html>
