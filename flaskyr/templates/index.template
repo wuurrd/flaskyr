@@ -33,11 +33,9 @@ function get_color(value){
 }
 
 function create_graph(){
-        $('#container').empty();
-        $('#longterm_container').empty();
-        $('#container').append("Loading weather data...");
+        //$('#container').append("Loading weather data...");
         $.get('/weather/longterm/json/' + search_location, function(data){
-          fill_container(data, $('#longterm_container'), 'longterm forecast');
+          fill_container(data, $('#longterm_container'), 'long-term forecast');
         });
 
         $.get('/weather/json/' + search_location, function(data){
@@ -47,7 +45,6 @@ function create_graph(){
 
 function fill_container(data, container, title_suffix){
         var series = [];
-        container.empty();
         var weatherdata = data.weatherdata.forecast.tabular.time;
         var hours = [];
         var wind_values = [];
@@ -158,6 +155,7 @@ function set_location(){
 </head>
 <body bgcolor="#111111">
 <div id="container"></div>
+<hr />
 <div id="longterm_container"></div>
 <select onchange="set_location()" id="location">
 <option value="Norway/Akershus/B%C3%A6rum/Halden_Brygge">Halden Brygge (Bærum)</option>
