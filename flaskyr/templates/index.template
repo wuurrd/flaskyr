@@ -155,7 +155,6 @@ function set_location(){
 </head>
 <body bgcolor="#111111">
 <div id="container"></div>
-<hr />
 <div id="longterm_container"></div>
 <select onchange="set_location()" id="location">
 <option value="Norway/Akershus/B%C3%A6rum/Halden_Brygge">Halden Brygge (Bærum)</option>
