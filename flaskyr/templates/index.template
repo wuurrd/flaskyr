@@ -12,7 +12,6 @@ function get_color(value){
   /*rainbow.setSpectrum('#7cb5ec', '#F2F5A9', '#DF0101');*/
   rainbow.setSpectrum('green', 'red');
   rainbow.setNumberRange(0.0, 20);
-  console.log(value, rainbow.colourAt(value));
   return '#' + rainbow.colourAt(value);
 
   if (value < 5) {
@@ -54,9 +53,7 @@ function fill_container(data, container, title_suffix){
             {y: parseFloat(value.windSpeed['@mps']),
              color: get_color(parseFloat(value.windSpeed['@mps']))});
           wind_direction.push(parseFloat(value.windDirection['@deg']));
-          from = value['@from'];
-          from = from.replace(/.*T/g, '');
-          from = from.replace(/:00$/g, '');
+          from = new Date(value['@from']);
           hours.push(from);
         });
         var location = data.weatherdata.location.name + ' ' + title_suffix;
@@ -71,7 +68,25 @@ function fill_container(data, container, title_suffix){
           }
         }
 
-        container.highcharts({
+        var lines = [];
+        for (var i=0; i<hours.length; i++) {
+          var hour = hours[i];
+          var next_reading;
+          if (i == hours.length - 1) {
+            next_reading = hours[i];
+          }
+          else {
+            var next_reading = hours[i+1];
+          }
+          if (next_reading.getDay() != hour.getDay()) {
+            lines.push({
+              color: '#707073',
+              width: 1,
+              value: i + 0.5
+              });
+          }
+        }
+        var chart = container.highcharts({
             chart: {
                 type: 'column',
                 alignTicks: false,
@@ -82,13 +97,20 @@ function fill_container(data, container, title_suffix){
             },
             xAxis: {
                 categories: hours,
+                type: 'time',
+                plotLines: lines,
                 labels: {
                   rotation: -45,
                   align: 'right',
                   style: {
                       fontSize: '13px',
                       fontFamily: 'Verdana, sans-serif'
-                  }
+                  },
+                  formatter: function() {
+                      var minutes = this.value.getMinutes();
+                      if (minutes < 10)
+                        minutes = "0" + minutes;
+                      return this.value.getHours() + ':' + minutes;}
               }
             },
             yAxis: [
