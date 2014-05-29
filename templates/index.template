@@ -54,6 +54,7 @@ function fill_container(data, container, title_suffix){
              color: get_color(parseFloat(value.windSpeed['@mps']))});
           wind_direction.push(parseFloat(value.windDirection['@deg']));
           from = new Date(value['@from']);
+          from.setUTCHours(from.getUTCHours() - 2);
           hours.push(from);
         });
         var location = data.weatherdata.location.name + ' ' + title_suffix;
