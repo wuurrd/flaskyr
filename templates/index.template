@@ -164,7 +164,7 @@ function fill_container(data, container, title_suffix){
 
 $(function () {
   create_graph();
-  window.setInterval(create_graph, 60*1000);
+  window.setInterval(create_graph, 360*1000);
 });
 
 function set_location(){
@@ -177,14 +177,20 @@ function set_location(){
 <div id="container"></div>
 <div id="longterm_container"></div>
 <select onchange="set_location()" id="location">
-<option value="Norway/Akershus/B%C3%A6rum/Halden_Brygge">Halden Brygge (Bærum)</option>
-<option value="Norway/Østfold/Rygge/Larkollen">Larkollen (Rygge)</option>
-<option value="Norway/Østfold/Råde/Store_Sletter/">Store Sletter (Østfold)</option>
-<option value="Norway/Akershus/Frogn/Torkilstranda/">Torkilstranda (Frogn)</option>
-<option value="Norway/Vestfold/Tønsberg/Ringshaug/">Ringshaug (Vestfold)</option>
-<option value="Norway/Østfold/Moss/Jeløya/">Jeløya (Moss)</option>
-<option value="Norway/Østfold/Hvaler/Ørekroken/">Ørekroken (Hvaler)</option>
-<option value="Norway/Finnmark/Måsøy/Fruholmen/">Fruholmen (Måsøy)</option>
+<option value="Norway/Akershus/B%C3%A6rum/Halden_Brygge">Halden Brygge - Bærum, Akershus</option>
+<option value="Norway/Akershus/Nesodden/Steilene/">Steilene - Nesodden, Akershus</option>
+<option value="Norway/Akershus/Asker/Sjøstrand/">Sjøstrand - Asker, Akershus</option>
+<option value="Norway/Akershus/Frogn/Torkilstranda/">Torkilstranda - Frogn, Akershus</option>
+<option value="Norway/Østfold/Rygge/Larkollen">Larkollen - Rygge, Østfold</option>
+<option value="Norway/Østfold/Råde/Saltnes/">Saltnes - Råde, Østfold</option>
+<option value="Norway/Østfold/Råde/Store_Sletter/">Store Sletter - Råde, Østfold</option>
+<option value="Norway/Østfold/Moss/Jeløya/">Jeløya - Moss, Østfold</option>
+<option value="Norway/Østfold/Hvaler/Ørekroken/">Ørekroken - Hvaler, Østfold</option>
+<option value="Norway/Østfold/Hvaler/Brattestø">Brattestø - Hvaler, Østfold</option>
+<option value="Norway/Vestfold/Tønsberg/Ringshaugbukta/">Ringshaugbukta - Tønsberg, Vestfold</option>
+<option value="Norway/Vestfold/Larvik/Omrestranda/">Omrestranda - Tønsberg, Vestfold</option>
+<option value="Norway/Finnmark/Måsøy/Fruholmen/">Fruholmen - Måsøy, Finmark</option>
+<option value="Sweden/Halland/Apelviken/">Apelviken - Halland, Sweeden</option>
 </select>
 <div style="position:relative; bottom:0px; color: white;text-align:center;">
     <a href="http://www.yr.no/place/Norway/Akershus/Bærum/Halden_brygge/hour_by_hour.html" style="text-decoration: none">
